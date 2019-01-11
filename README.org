@@ -1,0 +1,14 @@
+* Awesome Inverse Reinforcement Learning
+  
+An awesome list of papers (eventually summaries too), code, videos and tutorials related to *Inverse Reinforcement Learning*.
+
+
+** Papers
+   - [[http://ai.stanford.edu/~ang/papers/icml00-irl.pdf][Algorithms for Inverse Reinforcement Learning]] - Andrew Ng & Stuart Russell (2000)
+   - [[http://ai.stanford.edu/%7Eang/papers/icml04-apprentice.pdf][Apprenticeship Learning via Inverse Reinforcement Learning]] - Pieter Abbeel & Andrew Ng (2004)
+
+** Tutorials
+
+** Videos
+
+** Code
