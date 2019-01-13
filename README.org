@@ -3,12 +3,27 @@
 An awesome list of papers (eventually summaries too), code, videos and tutorials related to *Inverse Reinforcement Learning*.
 
 
+
 ** Papers
    - [[http://ai.stanford.edu/~ang/papers/icml00-irl.pdf][Algorithms for Inverse Reinforcement Learning]] - Andrew Ng & Stuart Russell (2000)
    - [[http://ai.stanford.edu/%7Eang/papers/icml04-apprentice.pdf][Apprenticeship Learning via Inverse Reinforcement Learning]] - Pieter Abbeel & Andrew Ng (2004)
+   - [[https://sites.ualberta.ca/~szepesva/papers/uai2007-irl.pdf][Apprenticeship Learning using Inverse Reinforcement Learning and
+Gradient Methods]] - Neu & Szepesvari (2007)
+   - [[https://www.cs.cmu.edu/~bziebart/publications/maximum-causal-entropy.pdf][Modeling Interaction via the Principle of Maximum Causal Entropy]] - Ziebart et. al. (2008)
+   - [[https://www.cs.cmu.edu/~bziebart/publications/thesis-bziebart.pdf][Modeling Purposeful Adaptive Behavior with the Principle of Maximum Causal Entropy]] - Brian Ziebart's PhD Thesis (2010)
+   - [[www.reason.cs.uiuc.edu/deepak/irl.pdf][Bayesian Inverse Reinforcement Learning]] - Deepak Ramachandran & Eyal Amir (2006)
+   - [[http://proceedings.mlr.press/v15/boularias11a/boularias11a.pdf][Relative Entropy Inverse Reinforcement Learning]] - Boularias et. al. (2011)
+   - [[https://arxiv.org/pdf/1507.04888.pdf][Maximum Entropy Deep Inverse Reinforcement Learning]] - Wulfmeier et al. (2016)
+   - Hierarchical Bayesian Inverse Reinforcement Learning. Kim et al. (2012)
+   - [[https://arxiv.org/abs/1603.00448][Guided Cost Learning]]. Finn et al. (2016)
+   - [[https://arxiv.org/abs/1606.03476][Generative Adversarial Imitation Learning]] - Jonathan Ho and Stefano Ermon (2016) 
 
 ** Tutorials
+   - [[https://thinkingwires.com/posts/2018-02-13-irl-tutorial-1.html][Inverse Reinforcement Learning Tutorial | part I | thinking wires]] - Johannes Heidecke
+   - [[https://thegradient.pub/learning-from-humans-what-is-inverse-reinforcement-learning/][Learning from humans: what is inverse reinforcement learning?]] - Jordan Alexander
 
 ** Videos
+   - [[https://www.youtube.com/watch?v=d9DlQSJQAoI&t=2060s][Deep RL Bootcamp Lecture 10B Inverse Reinforcement Learning]] - Chelsea Finn
 
 ** Code
+   - [[https://github.com/JohannesHeidecke/irl-benchmark][irl-benchmark]]
