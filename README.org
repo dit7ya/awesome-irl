@@ -16,8 +16,14 @@ Gradient Methods]] - Neu & Szepesvari (2007)
    - [[https://arxiv.org/pdf/1507.04888.pdf][Maximum Entropy Deep Inverse Reinforcement Learning]] - Wulfmeier et al. (2016)
    - Hierarchical Bayesian Inverse Reinforcement Learning. Kim et al. (2012)
    - [[https://arxiv.org/abs/1603.00448][Guided Cost Learning]]. Finn et al. (2016)
-   - [[https://arxiv.org/abs/1606.03476][Generative Adversarial Imitation Learning]] - Jonathan Ho and Stefano Ermon (2016) 
+   - [[https://arxiv.org/abs/1606.03476][Generative Adversarial Imitation Learning]] - Jonathan Ho and Stefano Ermon (2016)
 
+   - [[https://arxiv.org/abs/1712.05812v5][Occam's razor is insufficient to infer the preferences of irrational agents]] - Stuart Armstrong and Sören Mindermann (2018)
+
+
+*** Survey Papers/ Articles
+    - [[https://github.com/sjchoi86/irl_rocks/blob/e0b951342ae085d8f5fdfe44794ebce08b07e21b/IRL_survey.pdf][irl_rocks/IRL_survey.pdf]]
+    - [[https://arxiv.org/abs/1806.06877][A Survey of Inverse Reinforcement Learning: Challenges, Methods and Progress]] - Saurabh Arora and Prashant Doshi
 ** Tutorials
    - [[https://thinkingwires.com/posts/2018-02-13-irl-tutorial-1.html][Inverse Reinforcement Learning Tutorial | part I | thinking wires]] - Johannes Heidecke
    - [[https://thegradient.pub/learning-from-humans-what-is-inverse-reinforcement-learning/][Learning from humans: what is inverse reinforcement learning?]] - Jordan Alexander
