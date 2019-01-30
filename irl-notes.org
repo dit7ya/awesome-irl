@@ -1,0 +1,83 @@
+* Notes and Comments on IRL
+
+** intro
+  
+the goal of *inverse reinforcement learning* is to infer the reward function from expert demonstrations or policy. the idea is to show the agent a bunch of demonstrations of how an /expert/ in the real world solves a certain problem, so that it learns what problem the expert is trying to solve. for example, if you show one million example of a master chess player playing games, you expect your agent to learn that 'checkmate is very important', or that checkmate has high reward.
+
+a generic irl algorithm looks like this:
+
+      - initialize the reward function estimate
+      - unless converged
+        - solve mdp using that estimated reward function
+        - update the estimate using some method (this varies from algorithm to algorithm)
+
+for the update step various algorithms over the years have proposed various solutions, ranging from basic /linear programming/ to /generative adversarial networks/.
+
+various papers have used multiple versions for the problem, which we will list out here.
+
+the basis set up for the irl problem comes from *reinforcement learing* itself.
+
+in the most general setting, we consider.
+
+  a *markov decision process* is a tuple $(\mathcal{s}, \mathcal{a}, \mathcal{r}, \mathcal{p}, \gamma)$.
+
+  $\mathcal{s}$ is the discrete or continuous state-space. 
+  
+  $\mathcal{a}$ is the discrete or continuous action-space, available for each state.
+  
+  $\mathcal{r} : \mathcal{s} \times \mathcal{a} \times \mathcal{s} \rightarrow [0, \infty]$ is the reward function. $\mathcal{r}(s, a, s')$ determines the numerical reward obtained when taking a particular action $a$ in a particular state $s$ which leads the agent to the next state $s'$.
+  
+  $\mathcal{p}: \mathcal{s} \times \mathcal{a} \times \mathcal{s} \rightarrow [0,1]$ is the transition probability. if the state and actions are discrete, this can be represented as a tensor. $\mathcal{p}(s, a, s')$ determines the probability of reaching state $s'$, when taken action $a$ in state $s$.
+  
+  $\gamma \in [0, 1]$ is the discount factor. it determines the value of future rewards in current timestep.
+
+  the *total discounted reward* is $g_t = \sum_{k=0}^{t} \gamma^k r_{t+k}$.
+  
+  a *policy* is a function $\pi : \mathcal{s} \times \mathcal{a} \rightarrow [0, 1]$ which determines the agent's probability of taking action $a$ in state $s$.
+
+  the goal of *reinforcement learning* is to find the optimal policy (so that over an episode $g_t$ is maximized).
+  
+  the goal of *inverse reinforcement learning*, on the other hand, is to find the reward function given the optimal policy (there is some work on how to tackle sub-optimal policies, but we will come to that later).
+
+
+** algorithms
+   
+    
+*** linear programming irl from trajectories
+    http://ai.stanford.edu/~ang/papers/icml00-irl.pdf
+    
+    first IRL algorithm for trajectories
+    this algorithm does not explicitly require access to the expert policy and can work with trajectories only. the way I understand this algorithm is something like:
+    
+    - start with a random reward function and random policy
+    - write the reward function as dot product of paratmeters, and formulate the value function of a trajectory in terms of these parameters. our goal is to estimate these parameters
+    - for some criteria:
+      + generate trajectories based on current policy
+      + get the coeffs of the value of the trajectory based current reward function estimate
+      + solve the following linear programming problem to the new reward parameters
+        maximize 
+        $$ \sum_{i=1}^k p(v^{\pi*}(s_0) - v^{\pi_i}(s_0)) $$
+        such that
+        $$ \abs{\alpha_i} \leq 1$$
+        and the $p$ is the function
+        $p(x) = x$ if $ x \geq 0$ otherwise $p(x) = \lambda x$
+        $\lambda$ is a hyperparameter, russell and ng chose it to be 2.
+      + get a new policy that is optimal wrt this new reward functions and add that to the list of policies
+    - return the parameters
+
+** thoughts and ideas
+   so all algorithms differ in two ways -
+   - how to measure the difference between current estimation and expert demonstrations
+   - how to update the reward function estimate
+
+   if that is the case, we can probably frame irl completely as a supervised learning problem.
+   maybe we cannot, as giving the reward function in the training set is giving away the answer. 
+
+   is it possible to have an end-to-end approach to IRL? we input a bunch of *environments and expert trajectories* and get *reward function* as outputs? would current deep learning techniques be able to tackle this? my hunch is that this will not generalize well. but how do I prove that?
+
+** the challenges in IRL
+   
+- accurate inference (underspecified problem)
+- generalizability
+- correctness of prior knowledge (if you are using feature functions then they must be accurate and your method of IRL should be less sensitive to the accuracy of the prior knowledge)
+- solution complexity (grows with state-action space size) 
