@@ -58,12 +58,39 @@ in the most general setting, we consider.
         maximize 
         $$ \sum_{i=1}^k p(v^{\pi*}(s_0) - v^{\pi_i}(s_0)) $$
         such that
-        $$ \abs{\alpha_i} \leq 1$$
+        $$ |\alpha_i| \leq 1$$
         and the $p$ is the function
         $p(x) = x$ if $ x \geq 0$ otherwise $p(x) = \lambda x$
         $\lambda$ is a hyperparameter, russell and ng chose it to be 2.
       + get a new policy that is optimal wrt this new reward functions and add that to the list of policies
     - return the parameters
+
+*** Empowerment Based Adversarial Inverse Reinforcement Learning
+    - claims to learn nearly optimal rewards, along with policy
+    - GAIL recovers policy only, not transferrable rewards
+    - Reward Learning is difficult because
+      + many optimal policies explain the same demonstration
+      + many reward functions induces an optimal policy
+    - Empowerment is a *mutual information* based potential function, like value fucntions, which intuitively quantifies for a state the extent to which an agent can influence its environment.
+    - Empowerment acts as a regularizer in policy update
+    
+    - Empowerment is a *maximal of mutual information between a sequence of $K$ actions $a$ and the final state $s'$ reached after execution of those actions, conditioned on current state $s$.
+
+      $$ \Phi(s) = \max I(a, s'|s) = \max \mathbb{E}_{p(s'|a,s)w(a|s)}[\log (\frac{p(a,s'|s)}{w(a|s)p(s'|s)})]$$
+    - after some mathematical gymnastics, they approximate Empowerment as something and finally optimize it using the loss function
+      
+      $$ l_I(s,a,s') = | \beta \log q_\phi (a| s', s) - (\log \pi_\theta (a|s) + \Phi_\varphi(s))| $$
+      
+    - the algorithm has *four* models and are trained simultaneously.
+
+      + *inverse model* (maxmium log-likelihood supervised learning problem) that, given a set of trajectories, minimizes the mean-square error between its predicted action $q(a|s', s)$ and the action $a$ according to the generated trajectory.
+        $$ l_q(s,a,s') = (q_\phi (.|s, s') - a)^2 $$
+      + *empowerment optimization* as noted before
+
+      + *reward function*
+
+        first compute the Discriminator as 
+        $$D_{\zeta, \varphi} (s,a,s') = \frac{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)]}{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)] + \pi_\theta(a|s)}
 
 ** thoughts and ideas
    so all algorithms differ in two ways -
@@ -81,3 +108,4 @@ in the most general setting, we consider.
 - generalizability
 - correctness of prior knowledge (if you are using feature functions then they must be accurate and your method of IRL should be less sensitive to the accuracy of the prior knowledge)
 - solution complexity (grows with state-action space size) 
+
