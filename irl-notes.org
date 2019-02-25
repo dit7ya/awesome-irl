@@ -1,6 +1,6 @@
 * Notes and Comments on IRL
 
-** intro
+** Intro/ Definitions 
   
 the goal of *inverse reinforcement learning* is to infer the reward function from expert demonstrations or policy. the idea is to show the agent a bunch of demonstrations of how an /expert/ in the real world solves a certain problem, so that it learns what problem the expert is trying to solve. for example, if you show one million example of a master chess player playing games, you expect your agent to learn that 'checkmate is very important', or that checkmate has high reward.
 
@@ -27,6 +27,7 @@ in the most general setting, we consider.
   
   $\mathcal{r} : \mathcal{s} \times \mathcal{a} \times \mathcal{s} \rightarrow [0, \infty]$ is the reward function. $\mathcal{r}(s, a, s')$ determines the numerical reward obtained when taking a particular action $a$ in a particular state $s$ which leads the agent to the next state $s'$.
   
+  
   $\mathcal{p}: \mathcal{s} \times \mathcal{a} \times \mathcal{s} \rightarrow [0,1]$ is the transition probability. if the state and actions are discrete, this can be represented as a tensor. $\mathcal{p}(s, a, s')$ determines the probability of reaching state $s'$, when taken action $a$ in state $s$.
   
   $\gamma \in [0, 1]$ is the discount factor. it determines the value of future rewards in current timestep.
@@ -39,60 +40,89 @@ in the most general setting, we consider.
   
   the goal of *inverse reinforcement learning*, on the other hand, is to find the reward function given the optimal policy (there is some work on how to tackle sub-optimal policies, but we will come to that later).
 
+** Theorems
 
-** algorithms
+** Algorithms
    
+*** Early Methods
+**** Linear Programming
+***** linear programming irl from trajectories
+      http://ai.stanford.edu/~ang/papers/icml00-irl.pdf
     
-*** linear programming irl from trajectories
-    http://ai.stanford.edu/~ang/papers/icml00-irl.pdf
+      first IRL algorithm for trajectories
+      this algorithm does not explicitly require access to the expert policy and can work with trajectories only. the way I understand this algorithm is something like:
     
-    first IRL algorithm for trajectories
-    this algorithm does not explicitly require access to the expert policy and can work with trajectories only. the way I understand this algorithm is something like:
-    
-    - start with a random reward function and random policy
-    - write the reward function as dot product of paratmeters, and formulate the value function of a trajectory in terms of these parameters. our goal is to estimate these parameters
-    - for some criteria:
-      + generate trajectories based on current policy
-      + get the coeffs of the value of the trajectory based current reward function estimate
-      + solve the following linear programming problem to the new reward parameters
-        maximize 
-        $$ \sum_{i=1}^k p(v^{\pi*}(s_0) - v^{\pi_i}(s_0)) $$
-        such that
-        $$ |\alpha_i| \leq 1$$
-        and the $p$ is the function
-        $p(x) = x$ if $ x \geq 0$ otherwise $p(x) = \lambda x$
-        $\lambda$ is a hyperparameter, russell and ng chose it to be 2.
-      + get a new policy that is optimal wrt this new reward functions and add that to the list of policies
-    - return the parameters
+      - start with a random reward function and random policy
+      - write the reward function as dot product of paratmeters, and formulate the value function of a trajectory in terms of these parameters. our goal is to estimate these parameters
+      - for some criteria:
+        + generate trajectories based on current policy
+        + get the coeffs of the value of the trajectory based current reward function estimate
+        + solve the following linear programming problem to the new reward parameters
+          maximize 
+          $$ \sum_{i=1}^k p(v^{\pi*}(s_0) - v^{\pi_i}(s_0)) $$
+          such that
+          $$ |\alpha_i| \leq 1$$
+          and the $p$ is the function
+          $p(x) = x$ if $ x \geq 0$ otherwise $p(x) = \lambda x$
+          $\lambda$ is a hyperparameter, russell and ng chose it to be 2.
+        + get a new policy that is optimal wrt this new reward functions and add that to the list of policies
+      - return the parameters
 
-*** Empowerment Based Adversarial Inverse Reinforcement Learning
-    - claims to learn nearly optimal rewards, along with policy
-    - GAIL recovers policy only, not transferrable rewards
-    - Reward Learning is difficult because
-      + many optimal policies explain the same demonstration
-      + many reward functions induces an optimal policy
-    - Empowerment is a *mutual information* based potential function, like value fucntions, which intuitively quantifies for a state the extent to which an agent can influence its environment.
-    - Empowerment acts as a regularizer in policy update
+**** Apprenticeship Learning
+**** Maximum Margin Planning
+*** Maximum Entropy Based Methods
+**** Maximum Entropy IRL
+**** Maximum Causal Entropy IRL
+**** Deep MEIRL
+**** Guided Cost Learning (GCL/ GAN-GCL)
+**** GAIL
+**** AIRL
+**** Empowerment Based Adversarial Inverse Reinforcement Learning
+     - claims to learn nearly optimal rewards, along with policy
+     - GAIL recovers policy only, not transferrable rewards
+     - Reward Learning is difficult because
+       + many optimal policies explain the same demonstration
+       + many reward functions induces an optimal policy
+     - Empowerment is a *mutual information* based potential function, like value fucntions, which intuitively quantifies for a state the extent to which an agent can influence its environment.
+     - Empowerment acts as a regularizer in policy update
     
-    - Empowerment is a *maximal of mutual information between a sequence of $K$ actions $a$ and the final state $s'$ reached after execution of those actions, conditioned on current state $s$.
+     - Empowerment is a *maximal of mutual information between a sequence of $K$ actions $a$ and the final state $s'$ reached after execution of those actions, conditioned on current state $s$.
 
-      $$ \Phi(s) = \max I(a, s'|s) = \max \mathbb{E}_{p(s'|a,s)w(a|s)}[\log (\frac{p(a,s'|s)}{w(a|s)p(s'|s)})]$$
-    - after some mathematical gymnastics, they approximate Empowerment as something and finally optimize it using the loss function
+       $$ \Phi(s) = \max I(a, s'|s) = \max \mathbb{E}_{p(s'|a,s)w(a|s)}[\log (\frac{p(a,s'|s)}{w(a|s)p(s'|s)})]$$
+     - after some mathematical gymnastics, they approximate Empowerment as something and finally optimize it using the loss function
       
-      $$ l_I(s,a,s') = | \beta \log q_\phi (a| s', s) - (\log \pi_\theta (a|s) + \Phi_\varphi(s))| $$
+       $$ l_I(s,a,s') = | \beta \log q_\phi (a| s', s) - (\log \pi_\theta (a|s) + \Phi_\varphi(s))| $$
       
-    - the algorithm has *four* models and are trained simultaneously.
+     - the algorithm has *four* models and are trained simultaneously.
 
-      + *inverse model* (maxmium log-likelihood supervised learning problem) that, given a set of trajectories, minimizes the mean-square error between its predicted action $q(a|s', s)$ and the action $a$ according to the generated trajectory.
-        $$ l_q(s,a,s') = (q_\phi (.|s, s') - a)^2 $$
-      + *empowerment optimization* as noted before
+       + *inverse model* (maxmium log-likelihood supervised learning problem) that, given a set of trajectories, minimizes the mean-square error between its predicted action $q(a|s', s)$ and the action $a$ according to the generated trajectory.
+         $$ l_q(s,a,s') = (q_\phi (.|s, s') - a)^2 $$
+       + *empowerment optimization* as noted before
 
-      + *reward function*
+       + *reward function*
 
-        first compute the Discriminator as 
-        $$D_{\zeta, \varphi} (s,a,s') = \frac{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)]}{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)] + \pi_\theta(a|s)}
+         first compute the Discriminator as 
+         $$D_{\zeta, \varphi} (s,a,s') = \frac{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)]}{\exp[r_\zeta(s,a) + \gamma \Phi_{\varphi'}(s') - \Phi_{\varphi}(s)] + \pi_\theta(a|s)}
+         Finally train the parameters $/zeta$ by binary logistic regression to discriminate between expert and generated trajectories via
+        
+         $$ \mathbb{E}_\tau [\log D_{\zeta, \varphi} (s,a,s')] + \mathbb{E}_{\tau_E} [(1 - \log D_{\zeta, \varphi} (s,a,s')) ]$$
+       + *policy optimization*
+        
+         train the policy $\pi_{\theta}(a|s)$ to mazimize the discriminative reward $\hat{r}(s,a,s') = \log D(s,a,s') - \log (1 - D(s,a,s'))$ and to minimize the loss function $l_I(s,a,s') = \mid \beta \log q_\phi(a|s, s') - (\log \pi_\theta (a|s) + \Phi_\varphi(s)) \mid $ which accounts for empowerment regularization
+         overall training obejective becomes
+         $$ \mathbb{E}_\pi [\log \pi_\theta(a|s) \hat{r} (s, a,s')] + \lambda_I \mathbb{E}_\tau[l_I(s,a,s')]$$
+     - So, the final algorithm looks something like
+     - 
+      
+ 
+        
 
-** thoughts and ideas
+*** Bayesian
+**** BIRL
+**** MAP BIRL
+**** Hierarchical BIRL
+
+** Thoughts and Ideas
    so all algorithms differ in two ways -
    - how to measure the difference between current estimation and expert demonstrations
    - how to update the reward function estimate
@@ -102,10 +132,13 @@ in the most general setting, we consider.
 
    is it possible to have an end-to-end approach to IRL? we input a bunch of *environments and expert trajectories* and get *reward function* as outputs? would current deep learning techniques be able to tackle this? my hunch is that this will not generalize well. but how do I prove that?
 
-** the challenges in IRL
+*** Marry Bayesian Uncertainty with SOTA EAIRL
+
+** The Challenges in IRL
    
 - accurate inference (underspecified problem)
 - generalizability
 - correctness of prior knowledge (if you are using feature functions then they must be accurate and your method of IRL should be less sensitive to the accuracy of the prior knowledge)
 - solution complexity (grows with state-action space size) 
 
+  
