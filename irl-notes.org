@@ -42,6 +42,8 @@ in the most general setting, we consider.
 
 ** Theorems
 
+*** First Theorem from Ng & Russell
+
 ** Algorithms
    
 *** Early Methods
@@ -72,6 +74,37 @@ in the most general setting, we consider.
 **** Maximum Margin Planning
 *** Maximum Entropy Based Methods
 **** Maximum Entropy IRL
+     - the assumption here is that experts take actions that are exponentially more likely to generate higher rewards
+
+     - for a parameterized reward function $R_\psi(\tau) = \sum_{t} r_\psi (s_t, a_t)$
+       
+       $$p(\tau) = \frac{1}{Z}e^{R_\psi(\tau)}$$
+       with $Z = \sum_{\tau} e^{R_\psi(\tau)} d\tau$
+       
+     - so we want to parametrize the *reward function* in the way that maximizes the log-likelihood
+
+       $$L(\psi) = \sum_{\tau \in D}\log p_{r_\psi} (\psi)$$
+       $$ = \sum_{\tau \in D} (\log \frac{1}{Z} + R_\psi (\tau))$$
+       $$ = \sum_{\tau \in D} (R_\psi (\tau)) - M \log Z$$
+       $$ = \sum_{\tau \in D} (R_\psi (\tau)) - M \log \sum_{\tau}e^{R_\psi (\tau)}$$
+       
+     - so the gradient wrt the paratmeters is
+
+       $$\nabla_psi L(\psi) = \sum_{\tau \in D} \frac{dR_\psi(\tau)}{d\psi} - M \frac{1}{\sum_{\tau} e^{R_\psi(\tau)} d\tau}\sum{\tau}(e^{R_\psi(\tau)}\frac{dR_\psi(\tau)}{d\psi} )$$
+       
+       $$= \sum_{\tau \in D} \frac{dR_\psi(\tau)}{d\psi} - M \sum_{\tau} \frac{e^{R_\psi(\tau)}}{\sum_{\tau}e^{R_\psi(\tau)}}\frac{dR_\psi(\tau)}{d\psi} )$$
+       $$= \sum_{\tau \in D} \frac{dR_\psi(\tau)}{d\psi} - M \sum_{\tau} p(\tau \mid \psi)\frac{dR_\psi(\tau)}{d\psi} )$$
+       optimizing for $p(\tau \mid \psi)$ is same as $p(s | \psi)$ otherwise known as *state-visitation frequency*
+       so, finally
+       $$L(\psi)= \frac{1}{\mid D \mid}\sum_{\tau_d \in D} \frac{dr_\psi(\tau_d)}{d\psi} - \sum_{s} p(s \mid \psi)\frac{dr_\psi(s)}{d\psi} )$$
+       
+
+     - How do we calculate the *state-visitation frequency* in an efficient way?
+
+       TODO
+       
+     - So the final algorithm looks like:
+       [[~/Downloads/MEIRL.png]]
 **** Maximum Causal Entropy IRL
 **** Deep MEIRL
 **** Guided Cost Learning (GCL/ GAN-GCL)
