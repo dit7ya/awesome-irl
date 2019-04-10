@@ -26,7 +26,8 @@ An awesome list of papers (eventually summaries too), code, videos and tutorials
 ** Tutorials
    - [[https://thinkingwires.com/posts/2018-02-13-irl-tutorial-1.html][Inverse Reinforcement Learning Tutorial | part I | thinking wires]] - Johannes Heidecke
    - [[https://thegradient.pub/learning-from-humans-what-is-inverse-reinforcement-learning/][Learning from humans: what is inverse reinforcement learning?]] - Jordan Alexander
-
+** Courses
+   - [[https://app.grasple.com/#/level/1495][Inverse Reinforcement Learning by RAISE]]
 ** Videos
    - [[https://www.youtube.com/watch?v=d9DlQSJQAoI&t=2060s][Deep RL Bootcamp Lecture 10B Inverse Reinforcement Learning]] - Chelsea Finn
 
