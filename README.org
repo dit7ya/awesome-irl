@@ -18,6 +18,7 @@ An awesome list of papers (eventually summaries too), code, videos and tutorials
    - [[https://arxiv.org/abs/1606.03476][Generative Adversarial Imitation Learning]] - Jonathan Ho and Stefano Ermon (2016)
    - [[https://arxiv.org/abs/1712.05812v5][Occam's razor is insufficient to infer the preferences of irrational agents]] - Stuart Armstrong and Sören Mindermann (2018)
    - [[https://arxiv.org/abs/1904.06387][Extrapolating Beyond Suboptimal Demonstrations via Inverse Reinforcement Learning]] - Daniel S. Brown et. al. (2019)
+   - [[https://arxiv.org/abs/1906.09624][On the Feasibility of Learning, Rather than Assuming, Human Biases for Reward Inference]] - Rohin Shah et. al. (2019)
      
 *** Survey Papers/ Articles
     - [[https://github.com/sjchoi86/irl_rocks/blob/e0b951342ae085d8f5fdfe44794ebce08b07e21b/IRL_survey.pdf][irl_rocks/IRL_survey.pdf]]
